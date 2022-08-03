@@ -2,15 +2,16 @@
 
 ## Como Saber Quais são as Variáveis de Ambiente
 
-env
-printenv
+* env
+
+* printenv
 
 
 ## Busca por Alguma Variável Específica
 
 No exemplo o objetivo é identificar as variáveis do airflow (AIRFLOW_HOME):
 
-*env | grep AIRFLOW_HOME*
+* *env | grep AIRFLOW_HOME*
 
 
 ## Criar Variável Permanete
