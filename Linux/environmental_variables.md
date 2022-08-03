@@ -8,8 +8,9 @@ printenv
 
 ## Busca por Alguma Variável Específica
 
-No exemplo o objetivo é identificar as variáveis do airflow (AIRFLOW_HOME)
-env | grep AIRFLOW_HOME
+No exemplo o objetivo é identificar as variáveis do airflow (AIRFLOW_HOME):
+
+*env | grep AIRFLOW_HOME*
 
 
 ## Criar Variável Permanete
@@ -17,17 +18,23 @@ env | grep AIRFLOW_HOME
 Para adicionar uma variável de ambiente permanente é preciso adicio-na no arquivo de configuração do Linux. 
 
 Vamos fazer isso usando o nano, para abrir o comando use o comando:
-sudo nano ~/.bashrc
+
+* *sudo nano ~/.bashrc*
 
 Para exportar a variável:
-Export NOME DA VARIAVEL=valor
+
+* *Export NOME DA VARIAVEL=valor*
 
 Por exemplo:
-export AIRFLOW_HOME=/home/user/path
+
+* *export AIRFLOW_HOME=/home/user/path*
 
 Em seguida, vamos salvar e sair do Nano:
-CRTL + O (salvar)
-CRTL + X (sair)
+
+* CRTL + O (salvar)
+
+* CRTL + X (sair)
 
 Por fim, digite:
-source ~/.bashrc
+
+* source ~/.bashrc

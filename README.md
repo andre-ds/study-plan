@@ -2,7 +2,8 @@
 
 | Macro | Grupo | Sub-grupo |Itens | Script | Exercise |
 |------|------|------|------|------|------|
-| Linux | Fundamentals | Variáveis de Ambiente, Processos, Permissões | - | :heavy_check_mark: |  :x: |
+| Linux | Fundamentals | Variáveis de Ambiente | Verificando Variáveis, Criando Variaveis Permanentes | :heavy_check_mark: |  :x: |
+| Linux | Fundamentals | Processos, Permissões | - | :heavy_check_mark: |  :x: |
 | Linux | VIM | - | - | :x: |  :x: |
 | Linux | Shell | Automatização de Scripts | - | :x: |  :x: |
 | Python | Fundamentals | Basic | Writing Texts | :heavy_check_mark: |  :x: |
