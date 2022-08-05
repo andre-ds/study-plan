@@ -16,7 +16,7 @@ No exemplo o objetivo é identificar as variáveis do airflow (AIRFLOW_HOME):
 
 ## Criar Variável Permanete
 
-Para adicionar uma variável de ambiente permanente é preciso adicio-na no arquivo de configuração do Linux. 
+Para adicionar uma variável de ambiente permanente é preciso adiciona-lo no arquivo de configuração do Linux (BASH PROFILE). 
 
 Vamos fazer isso usando o nano, para abrir o comando use o comando:
 

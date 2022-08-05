@@ -2,7 +2,7 @@
 
 | Macro | Grupo | Sub-grupo |Itens | Script | Exercise |
 |------|------|------|------|------|------|
-| Linux | Fundamentals | Variáveis de Ambiente | Verificando Variáveis, Criando Variaveis Permanentes | :heavy_check_mark: |  :x: |
+| Linux | Fundamentals | Variáveis de Ambiente | Verificando Variáveis, Criando Variaveis Permanentes | :heavy_check_mark: |  :heavy_check_mark: |
 | Linux | Fundamentals | Processos, Permissões | - | :heavy_check_mark: |  :x: |
 | Linux | VIM | - | - | :x: |  :x: |
 | Linux | Shell | Automatização de Scripts | - | :x: |  :x: |
@@ -39,6 +39,7 @@
 | Elasticsearch | Fundamentals | POST, GET, PUT, DELETE | :heavy_check_mark: | :x: | :x: |
 | Elasticsearch | Analyzers | Padrão, Portugues, SInonimos | :heavy_check_mark: | :x: | :x: |
 | Elasticsearch | Dashboard | Kibana | :heavy_check_mark: | :x: | :x: |
+| Airflow | Fundamentals | Instalation| :heavy_check_mark: | :x: | :x: |
 | Airflow | Fundamentals | Extraindo Dados, Tarefeas de Manipulação, Persistindo Dados | :x: | :x: | :x: |
 | Mensageria/Streams| Kafka | - | :x: | :x: | :x: |
 | Docker | Fundamentals | Imagens, Volumes, Network | :heavy_check_mark: | :x: | :x: |
