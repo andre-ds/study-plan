@@ -92,6 +92,9 @@ dict1 = {'a': 1000, 'b':2000, 'c':3000}
 dict1['a']
 dict1['b']
 
+# Adding
+dict1['d'] = 4000 
+
 ## check if contains key
 'a' in dict1
 

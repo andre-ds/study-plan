@@ -37,11 +37,11 @@ Após a instalação ser completada é necessário inicializar o banco de dados.
 
 * Para criar o usuário de acesso, digite o seguinte comando:
 
-*airflow users create \
-    --username admin \
-    --firstname Plinio \
-    --lastname Silva \
-    --role Admin \
+*airflow users create \\
+    --username admin \\
+    --firstname Plinio \\
+    --lastname Silva \\
+    --role Admin \\
     --email pliniosilva@gmail.com*
 
 Em seguida será necessário digitar o password e confirmá-lo.
@@ -51,10 +51,12 @@ Em seguida será necessário digitar o password e confirmá-lo.
 
 Para iniciar o airflow é necessário iniciar o Webserver, serviço responsável pela interface da ferramenta e o Scheduler, responsável pelo agendamento das tarefas de execução. Respectivamente, para iniciá-los, digite:
 
-* Webserver
+* Webserver:
+
 airflow webserver -p 8080
 
-* Scheduler
+* Scheduler:
+
 airflow scheduler
 
 Obs: Digitando os comandos desta forma, você ficará conectado aos terminais, portanto, será necessário abrir um terminal para cada serviço. Para não ficar conectado 

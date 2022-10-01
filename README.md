@@ -23,7 +23,7 @@
 | Python | Design Patterns | Behavior | :x: | :x: | :x: |
 | Python | Design Patterns | Construction | :x: | :x: | :x: |
 | Python | Test | Testes Unitários (pytest) | :x: | :x: | :x: |
-| Python | Libs | pyspark | :heavy_check_mark: | :x: | :x: |
+| Python | Libs | pyspark | missing values | :heavy_check_mark: | :heavy_check_mark: |
 | Python | Libs | pandas | :heavy_check_mark: | :x: | :x: |
 | Python | Libs | numpy | :x: | :x: | :x: |
 | Python | Libs | pandas | :x: | :x: | :x: |
