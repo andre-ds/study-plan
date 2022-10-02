@@ -4,7 +4,8 @@ from pyspark.context import SparkContext
 from pyspark.conf import SparkConf
 from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, count, sum, min, max, mean, isnan, when
+from pyspark.sql.window import Window
+from pyspark.sql.functions import col, count, sum, min, max, mean, isnan, when, ntile, lit
 #from pyspark.sql.functions import col, quarter, to_date, month, year, when, to_date, asc, months_between, round, concat, lit, regexp_replace, sum, max
 from pyspark.sql.types import StructField, StructType, DateType, DoubleType, StringType, IntegerType, FloatType
 
@@ -14,12 +15,10 @@ spark = SparkSession(SparkContext(conf=SparkConf())
 
 # Datasize Source
 # https://www.kaggle.com/datasets/praveengovi/credit-risk-classification-dataset?select=customer_data.csv
-DIR_PATH = os.path.join(os.path.join(os.path.dirname(
-    os.path.realpath('__file__')), 'Pyspark'), 'data')
+DIR_PATH = os.path.join(os.path.join(os.path.dirname(os.path.realpath('__file__')), 'Pyspark'), 'data')
 
 # Oppen Dataset
-dataset = spark.read.options(inferSchema='True', header='True').csv(
-    os.path.join(DIR_PATH, 'customer_data.csv'))
+dataset = spark.read.options(inferSchema='True', header='True').csv(os.path.join(DIR_PATH, 'customer_data.csv'))
 
 
 # Missing Values
@@ -69,26 +68,40 @@ def remove_na_variables_from_dict(limit_list):
 
     result = {}
     for limit in limit_list:
-        variable_list = [
-            var for var in dataset.columns if missing_variables[var] > limit]
-        for var in variable_list:
-            limit = re.sub('[.]', '_', str(limit))
-            result[f'X_limit_na_{limit}'] = variable_list
+        variable_list = [var for var in dataset.columns if missing_variables[var] > limit]   
+        # adding
+        limit = re.sub('[.]', '_', str(limit))
+        result[f'x_limit_na_{limit}'] = variable_list
 
     return result
-
 
 limit_list = [0.01, 0.02, 0.05, 0.2]
 x_variabes_out_nan = remove_na_variables_from_dict(limit_list=limit_list)
 
 
+# Calculating WOEs
+'''
+dataset = dataset.withColumn('partitionBy', lit('partitionBy'))
+windowSpec = Window.partitionBy('partitionBy').orderBy('fea_4')
+dataset = dataset.withColumn('cat_fea_4', ntile(5) \
+    .over(windowSpec)).drop('partitionBy')
+'''
+
+def discretizing_percentile(dataset, ntile_value, variable, categorize_na):
+
+    cat_variable = f'cat_{variable}'
+    dataset = dataset.withColumn('partitionBy', lit('partitionBy'))
+    dataset = dataset.withColumn(cat_variable, ntile(ntile_value) \
+        .over(Window.partitionBy('partitionBy') \
+        .orderBy(variable))).drop('partitionBy')
+
+    if categorize_na:
+        dataset = dataset.withColumn(cat_variable, when(dataset[variable].isNull(), 0).otherwise(col(cat_variable)))
+
+
+    return dataset
+
+
+dataset = discretizing_percentile(dataset=dataset, ntile_value=5, variable='fea_1')
+
 dataset.show()
-dataset.columns
-dataset.printSchema()
-
-schema = StructType([
-    StructField('variable', StringType(), True),
-    StructField('pct', FloatType(), True)])
-
-missing_variables = spark.createDataFrame(
-    data=missing_variables, schema=schema)
