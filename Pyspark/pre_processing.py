@@ -17,19 +17,8 @@ spark = SparkSession(SparkContext(conf=SparkConf())
                      .getOrCreate())
 
 
-
-def missing_value_pct(dataset: DataFrame, type: dict):
-    '''
-    Test:
-    missing_variables = missing_value_pct(dataset=dataset, type='dict')
-    missing_variables
-
-    missing_variables = missing_value_pct(dataset=dataset, type='spark_df')
-    missing_variables.show()
-
-    missing_variables = missing_value_pct(dataset=dataset, type='pandas_df')
-    missing_variables.head()
-    '''
+'''
+def missing_value_pct(dataset: DataFrame, type: str):
 
     from pyspark.sql.functions import col, isnan, when, count
     total = dataset.count()
@@ -46,6 +35,38 @@ def missing_value_pct(dataset: DataFrame, type: dict):
         import pandas as pd
         missing_variables = {col: dataset.filter(isnan(
             dataset[col]) | dataset[col].isNull()).count()/total for col in dataset.columns}
+        missing_variables = pd.DataFrame.from_dict(
+            missing_variables, orient='index').reset_index()
+        missing_variables.columns = ['variable', 'pct']
+        return missing_variables
+'''
+
+def missing_value_pct(dataset: DataFrame, type: str):
+    '''
+    Test:
+    missing_variables = missing_value_pct(dataset=dataset, type='dict')
+    missing_variables
+
+    missing_variables = missing_value_pct(dataset=dataset, type='spark_df')
+    missing_variables.show()
+
+    missing_variables = missing_value_pct(dataset=dataset, type='pandas_df')
+    missing_variables.head()
+    '''
+
+    from pyspark.sql.functions import col, isnan, when, count
+    total = dataset.count()
+
+    if type == 'dict':
+        missing_variables = {col: dataset.filter(dataset[col].isNull()).count()/total for col in dataset.columns}
+        return missing_variables
+    elif type == 'spark_df':
+        missing_variables = dataset.select(
+            [(count(when(col(c).isNull(), c))/total).alias(c) for c in dataset.columns])
+        return missing_variables
+    elif type == 'pandas_df':
+        import pandas as pd
+        missing_variables = {col: dataset.filter(dataset[col].isNull()).count()/total for col in dataset.columns}
         missing_variables = pd.DataFrame.from_dict(
             missing_variables, orient='index').reset_index()
         missing_variables.columns = ['variable', 'pct']
@@ -153,6 +174,11 @@ dataset = spark.read.options(inferSchema='True', header='True').csv(os.path.join
 missing_variables = missing_value_pct(dataset=dataset, type='dict')
 missing_variables
 
+missing_variables = missing_value_pct(dataset=dataset, type='spark_df')
+missing_variables.show()
+
+missing_variables = missing_value_pct(dataset=dataset, type='pandas_df')
+missing_variables.head()
 
 # Removing Missing Values
 ## Selecting Variable by pct Missing Value Criteria
