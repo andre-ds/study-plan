@@ -23,7 +23,7 @@
 | Python | Design Patterns | Behavior | :x: | :x: | :x: |
 | Python | Design Patterns | Construction | :x: | :x: | :x: |
 | Python | Test | Testes Unitários (pytest) | :x: | :x: | :x: |
-| Python | Libs | pyspark | missing values | :heavy_check_mark: | :heavy_check_mark: |
+| Python | Libs | pyspark | missing values; discretizing variables; pre-prcessing exemple | :heavy_check_mark: | :heavy_check_mark: |
 | Python | Libs | pandas | :heavy_check_mark: | :x: | :x: |
 | Python | Libs | numpy | :x: | :x: | :x: |
 | Python | Libs | pandas | :x: | :x: | :x: |
@@ -31,6 +31,13 @@
 | Python | Libs | seaborn | :x: | :x: | :x: |
 | Python | Libs | plotly | :x: | :x: | :x: |
 | Python | Libs | streamlit | :x: | :x: | :x: |
+| Modeling | Libs | sklearn | training test split | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Libs | optbinning | BinningProcess | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Libs | optuna | RandomForest; XGBoost | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Models Avaliation Metrics | SKlearn | confusion_matrix; classification_report | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Models Avaliation Metrics | plot_metric | plot_roc_curve; plot_precision_recall_curve | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Models Avaliation Metrics | scikitplot | plot_ks_statistic | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Models Avaliation Metrics | optbinning | OptimalBinning - GHs Analisys; GHs Percentile | :heavy_check_mark: | :heavy_check_mark: |
 | MLflow | Ciclo de Vida de Modelos | Tracking | :heavy_check_mark: | :x: | :x: |
 | MLflow | Ciclo de Vida de Modelos | Reproducao, Predict | :heavy_check_mark: | :x: | :x: |
 | MLflow | Ciclo de Vida de Modelos | Model Registry | :heavy_check_mark: | :x: | :x: |
