@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pylab as plt
 import pandas as pd
 from optbinning import BinningProcess, OptimalBinning
+from optbinning.scorecard import plot_auc_roc, plot_cap, plot_ks
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.ensemble import RandomForestClassifier
@@ -27,7 +28,7 @@ def dataset_description(dataset):
 
 
 # Oppen Dataset
-DIR_PATH = os.path.join(os.path.join(os.path.dirname(os.path.realpath('__file__')), 'model'), 'data')
+DIR_PATH = os.path.join(os.path.join(os.path.dirname(os.path.realpath('__file__')), 'modeling'), 'data')
 dataset = pd.read_csv(os.path.join(DIR_PATH, 'customer_data.csv'))
 dataset = dataset.fillna(0)
 
@@ -70,20 +71,20 @@ dataset_test = id.loc[X_test.index, :]
 
 # Exemple Model
 params = {'class_weight': 'balanced_subsample', 'max_depth': 40, 'max_leaf_nodes': 30, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 50, 'n_estimators': 50, 'random_state': 7}
-rnd = RandomForestClassifier(**params)
+model = RandomForestClassifier(**params)
 # Fitting
-rnd.fit(X_train, y_train)
+model.fit(X_train, y_train)
 
 
 # Prediction
-y_train_pred = rnd.predict(X_train)
-y_train_prob = rnd.predict_proba(X_train)[:, 1]
+y_train_pred = model.predict(X_train)
+y_train_prob = model.predict_proba(X_train)[:, 1]
 
-y_test_pred = rnd.predict(X_test)
-y_test_prob = rnd.predict_proba(X_test)[:, 1]
+y_test_pred = model.predict(X_test)
+y_test_prob = model.predict_proba(X_test)[:, 1]
 
-y_out_pred = rnd.predict(X_out)
-y_out_prob = rnd.predict_proba(X_out)[:, 1]
+y_out_pred = model.predict(X_out)
+y_out_prob = model.predict_proba(X_out)[:, 1]
 
 
 # Creating Datasets with Predictions
@@ -124,10 +125,19 @@ plt.figure(figsize=(5,5))
 bc.plot_roc_curve(title='ROC-Train')
 plt.show()
 
+# optbinning
+plot_auc_roc(y_train, y_train_pred, title='ROC-Train')
+plt.show()
+
+
 # ROC-Test
 bc = BinaryClassification(y_test, y_test_pred, labels=["Class 1", "Class 2"])
 plt.figure(figsize=(5,5))
 bc.plot_roc_curve(title='ROC-Test')
+plt.show()
+
+# optbinning
+plot_auc_roc(y_test, y_test_pred, title='ROC-Test')
 plt.show()
 
 
@@ -135,13 +145,13 @@ plt.show()
 # Plot Precision Recall Curve
 # =============================================================================
 
-# ROC-Train
+# Recall-Train
 bc = BinaryClassification(y_train, y_train_pred, labels=["Class 1", "Class 2"])
 plt.figure(figsize=(5,5))
 bc.plot_precision_recall_curve(title='Precision-Recall-Train')
 plt.show()
 
-# ROC-Test
+# Recall-Test
 bc = BinaryClassification(y_test, y_test_pred, labels=["Class 1", "Class 2"])
 plt.figure(figsize=(5,5))
 bc.plot_precision_recall_curve(title='Precision-Recall-Test')
@@ -154,11 +164,21 @@ plt.show()
 # import scikitplot as skplt
 
 # Train
-skplt.metrics.plot_ks_statistic(y_train, rnd.predict_proba(X_train), title='KS-Train')
+skplt.metrics.plot_ks_statistic(y_train, model.predict_proba(X_train), title='KS-Train')
 plt.show()
 
+# optbinning
+plot_ks(y_train, y_train_pred, title='ROC-Train')
+plt.show()
+
+
 # Test
-skplt.metrics.plot_ks_statistic(y_test, rnd.predict_proba(X_test), title='KS-Test')
+skplt.metrics.plot_ks_statistic(y_test, model.predict_proba(X_test), title='KS-Test')
+plt.show()
+
+
+# optbinning
+plot_ks(y_test, y_test_pred, title='ROC-Test')
 plt.show()
 
 
@@ -196,7 +216,6 @@ dataset_out.groupby(['gh'])[y_col].agg(['mean', 'count'])
 ## GH Graph Analisys
 fig = plt.figure(figsize=(18,8))
 sns.lineplot(data=dataset_train, x='date', y='label', hue='gh', ci=None)
-sns.lineplot(data=dataset_train, x='date', y='label', ci=None, color='black', label='Mean', dashes=[(2,2)])
 plt.grid(axis='y', linestyle='--')
 plt.xlabel('Date')
 plt.ylabel('% Default')
@@ -219,7 +238,6 @@ dataset_out.groupby(['gh'])[y_col].agg(['mean', 'count'])
 ## GH Graph Analisys
 fig = plt.figure(figsize=(18,8))
 sns.lineplot(data=dataset_train, x='date', y='label', hue='gh', ci=None)
-sns.lineplot(data=dataset_train, x='date', y='label', ci=None, color='black', label='Mean', dashes=[(2,2)])
 plt.grid(axis='y', linestyle='--')
 plt.xlabel('Date')
 plt.ylabel('% Default')
@@ -227,6 +245,25 @@ plt.title('GHs Train')
 plt.legend(loc='upper center', bbox_to_anchor=(1.1,0.8), fancybox=True)
 plt.show()
 
+# =============================================================================
+# Feature Importance
+# =============================================================================
+
+importances = model.feature_importances_
+variables_names = X_cols
+
+# Creating Dataframe
+dataframe = {'variables_names':variables_names, 'importances':importances}
+dataframe = pd.DataFrame(dataframe)
+dataframe.sort_values(by='importances', ascending=False,inplace=True)
+
+# Plotting
+plt.figure(figsize=(10,20))
+sns.barplot(x=dataframe['importances'], y=dataframe['variables_names'])
+plt.title('Feature Importance')
+plt.xlabel('Importances')
+plt.ylabel('Variables')
+plt.show()
 
 
 '''

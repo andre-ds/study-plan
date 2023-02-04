@@ -2,8 +2,9 @@ import os
 import optuna
 import pandas as pd
 import xgboost as xgb
+import lightgbm as lgb
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import average_precision_score
+from sklearn.metrics import average_precision_score, brier_score_loss
 from sklearn.model_selection import train_test_split
 
 
@@ -60,9 +61,9 @@ dataset_test = id.loc[X_test.index, :]
 def objective(trial):
     
     # Invoke suggest methods of a Trial object to generate hyperparameters.
-    regressor_name = trial.suggest_categorical('classifier', ['RandomForest'])
+    regressor_name = trial.suggest_categorical('classifier', ['RandomForest', 'lightGBM'])
     if regressor_name == 'RandomForest':
-        max_depth = trial.suggest_int(name='max_depth', low=10, high=50)
+        max_depth = trial.suggest_int(name='max_depth', low=2, high=5)
         max_leaf_nodes = trial.suggest_int(name='max_leaf_nodes', low=10, high=40)
         min_impurity_decrease = trial.suggest_float(name='impurity', low=0.0, high=1.0, step=0.1)
         min_samples_leaf = trial.suggest_int(name='min_samples_leaf', low=10, high=60)
@@ -70,10 +71,28 @@ def objective(trial):
         model = RandomForestClassifier(random_state=7, class_weight='balanced_subsample',
             max_depth=max_depth, max_leaf_nodes=max_leaf_nodes, min_impurity_decrease=min_impurity_decrease,
             min_samples_leaf=min_samples_leaf, n_estimators=n_estimators)
+    elif regressor_name == 'lightGBM':
+        objective = trial.suggest_categorical('objective', ['binary'])
+        n_jobs = trial.suggest_categorical('n_jobs', [-1])
+        class_weight = trial.suggest_categorical('class_weight', ['balanced'])
+        metric = trial.suggest_categorical('metric', ['binary_logloss', 'cress_entropy', 'auc', 'avarege_precision'])
+        lambda_l1 = trial.suggest_float(name='impurity', low=0.0, high=1e-8, step=3)
+        lambda_l2 = trial.suggest_float(name='impurity', low=0.0, high=1e-8, step=3)
+        max_depth = trial.suggest_int(name='max_depth', low=2, high=10)
+        n_estimators =  trial.suggest_int(name='n_estimators', low=5, high=150)
+        min_child_samples = trial.suggest_int(name='min_child_samples', low=50, high=15000)
+        model = lightgbm(random_state=7, objective=objective, n_jobs=n_jobs,
+                        class_weight=class_weight, metric=metric, lambda_l1=lambda_l1,
+                        lambda_l2=lambda_l2, max_depth=max_depth, n_estimators=n_estimators,
+                        min_child_samples=min_child_samples)
+
 
     model.fit(X_train, y_train)
     pred = model.predict(X_train)
+    '''
     metric = average_precision_score(y_train, pred)
+    '''
+    metric = brier_score_loss(y_train, pred)
 
     # An objective value linked with the Trial object.
     return metric  

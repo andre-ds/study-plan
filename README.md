@@ -37,7 +37,8 @@
 | Modeling | Models Avaliation Metrics | SKlearn | confusion_matrix; classification_report | :heavy_check_mark: | :heavy_check_mark: |
 | Modeling | Models Avaliation Metrics | plot_metric | plot_roc_curve; plot_precision_recall_curve | :heavy_check_mark: | :heavy_check_mark: |
 | Modeling | Models Avaliation Metrics | scikitplot | plot_ks_statistic | :heavy_check_mark: | :heavy_check_mark: |
-| Modeling | Models Avaliation Metrics | optbinning | OptimalBinning - GHs Analisys; GHs Percentile | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Models Avaliation Metrics | optbinning | plot_auc_roc; plot_ks; OptimalBinning - GHs Analisys; GHs Percentile | :heavy_check_mark: | :heavy_check_mark: |
+| Modeling | Models Avaliation Metrics | Features Importance | - | :heavy_check_mark: | :heavy_check_mark: |
 | MLflow | Ciclo de Vida de Modelos | Tracking | :heavy_check_mark: | :x: | :x: |
 | MLflow | Ciclo de Vida de Modelos | Reproducao, Predict | :heavy_check_mark: | :x: | :x: |
 | MLflow | Ciclo de Vida de Modelos | Model Registry | :heavy_check_mark: | :x: | :x: |
